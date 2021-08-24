@@ -39,6 +39,10 @@ export const SEND_ENQUIRY_REQUEST = 'app/ListingPage/SEND_ENQUIRY_REQUEST';
 export const SEND_ENQUIRY_SUCCESS = 'app/ListingPage/SEND_ENQUIRY_SUCCESS';
 export const SEND_ENQUIRY_ERROR = 'app/ListingPage/SEND_ENQUIRY_ERROR';
 
+export const UPDATE_PROFILE_REQUEST = 'app/ProfileSettingsPage/UPDATE_PROFILE_REQUEST';
+export const UPDATE_PROFILE_SUCCESS = 'app/ProfileSettingsPage/UPDATE_PROFILE_SUCCESS';
+export const UPDATE_PROFILE_ERROR = 'app/ProfileSettingsPage/UPDATE_PROFILE_ERROR';
+
 // ================ Reducer ================ //
 
 const initialState = {
@@ -103,6 +107,21 @@ const listingPageReducer = (state = initialState, action = {}) => {
 export default listingPageReducer;
 
 // ================ Action creators ================ //
+
+// SDK method: sdk.currentUser.updateProfile
+export const updateProfileRequest = params => ({
+  type: UPDATE_PROFILE_REQUEST,
+  payload: { params },
+});
+export const updateProfileSuccess = result => ({
+  type: UPDATE_PROFILE_SUCCESS,
+  payload: result.data,
+});
+export const updateProfileError = error => ({
+  type: UPDATE_PROFILE_ERROR,
+  payload: error,
+  error: true,
+});
 
 export const setInitialValues = initialValues => ({
   type: SET_INITIAL_VALUES,
@@ -329,4 +348,28 @@ export const loadData = (params, search) => dispatch => {
   } else {
     return Promise.all([dispatch(showListing(listingId)), dispatch(fetchReviews(listingId))]);
   }
+};
+
+export const updateWishlist = actionPayload => {
+  return (dispatch, getState, sdk) => {
+    dispatch(updateProfileRequest());
+
+    console.log(actionPayload);
+
+    return sdk.currentUser
+      .updateProfile(actionPayload)
+      .then(response => {
+        dispatch(updateProfileSuccess(response));
+
+        const entities = denormalisedResponseEntities(response);
+        if (entities.length !== 1) {
+          throw new Error('Expected a resource in the sdk.currentUser.updateProfile response');
+        }
+        const currentUser = entities[0];
+
+        // Update current user in state.user.currentUser through user.duck.js
+        dispatch(currentUserShowSuccess(currentUser));
+      })
+      .catch(e => dispatch(updateProfileError(storableError(e))));
+  };
 };

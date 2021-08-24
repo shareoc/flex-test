@@ -23,6 +23,7 @@ import {
   ensureOwnListing,
   ensureUser,
   userDisplayNameAsString,
+  ensureCurrentUser,
 } from '../../util/data';
 import { richText } from '../../util/richText';
 import { getMarketplaceEntities } from '../../ducks/marketplaceData.duck';
@@ -38,10 +39,16 @@ import {
   LayoutWrapperFooter,
   Footer,
   BookingPanel,
+  Button,
 } from '../../components';
 import { TopbarContainer, NotFoundPage } from '../../containers';
 
-import { sendEnquiry, fetchTransactionLineItems, setInitialValues } from './ListingPage.duck';
+import {
+  sendEnquiry,
+  fetchTransactionLineItems,
+  setInitialValues,
+  updateWishlist,
+} from './ListingPage.duck';
 import SectionImages from './SectionImages';
 import SectionAvatar from './SectionAvatar';
 import SectionHeading from './SectionHeading';
@@ -51,6 +58,7 @@ import SectionReviews from './SectionReviews';
 import SectionHostMaybe from './SectionHostMaybe';
 import SectionRulesMaybe from './SectionRulesMaybe';
 import SectionMapMaybe from './SectionMapMaybe';
+import SectionViewMaybe from './SectionViewMaybe';
 import css from './ListingPage.module.css';
 
 const MIN_LENGTH_FOR_LONG_WORDS_IN_TITLE = 16;
@@ -196,6 +204,7 @@ export class ListingPageComponent extends Component {
       lineItems,
       fetchLineItemsInProgress,
       fetchLineItemsError,
+      onUpdateWishlist,
     } = this.props;
 
     const listingId = new UUID(rawParams.id);
@@ -341,6 +350,36 @@ export class ListingPageComponent extends Component {
       }
     };
 
+    const handleWishlistSubmit = values => {
+      // lets begin by retrieving the id of this listing and logging it
+      // then we have to retrieve the current state of the wishlist in the database
+      // then update that into private data hmm
+
+      const user = ensureCurrentUser(currentUser);
+      const currentWishlist = user.attributes.profile.privateData.wishlist;
+      if (currentWishlist.find(id => currentListing.id !== id)) {
+        const newWishlist = [...currentWishlist, currentListing.id.uuid];
+      // console.log(currentWishlist)
+
+      // currentWishlist.find(id => currentListing.id !== id) ?
+      //   currentWishlist.push(currentListing.id) :
+      //   null
+
+      // currentWishlist.push(currentListing.id)
+
+      // console.log(currentWishlist);
+
+      // .uuid lisäys onnistu mut ton objektin lisääminen ei .... ?
+
+        const x = { privateData: { wishlist: newWishlist } };
+
+        onUpdateWishlist(x);
+      }
+      else {
+        console.log("already on list")
+      }
+    };
+
     const listingImages = (listing, variantName) =>
       (listing.images || [])
         .map(image => {
@@ -376,6 +415,7 @@ export class ListingPageComponent extends Component {
       </NamedLink>
     );
 
+    const viewOptions = findOptionsForSelectFilter('view', filterConfig);
     const amenityOptions = findOptionsForSelectFilter('amenities', filterConfig);
     const categoryOptions = findOptionsForSelectFilter('category', filterConfig);
     const category =
@@ -434,6 +474,9 @@ export class ListingPageComponent extends Component {
                     showContactUser={showContactUser}
                     onContactUser={this.onContactUser}
                   />
+                  <Button rootClassName={css.wishlistButton} onClick={() => handleWishlistSubmit()}>
+                    <FormattedMessage id="Wishlist.ctaButtonMessage" />
+                  </Button>
                   <SectionDescriptionMaybe description={description} />
                   <SectionFeaturesMaybe options={amenityOptions} publicData={publicData} />
                   <SectionRulesMaybe publicData={publicData} />
@@ -456,6 +499,7 @@ export class ListingPageComponent extends Component {
                     currentUser={currentUser}
                     onManageDisableScrolling={onManageDisableScrolling}
                   />
+                  <SectionViewMaybe options={viewOptions} publicData={publicData} />
                 </div>
                 <BookingPanel
                   className={css.bookingPanel}
@@ -594,6 +638,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
+  onUpdateWishlist: data => dispatch(updateWishlist(data)),
   onManageDisableScrolling: (componentId, disableScrolling) =>
     dispatch(manageDisableScrolling(componentId, disableScrolling)),
   callSetInitialValues: (setInitialValues, values, saveToSessionStorage) =>

@@ -32,6 +32,7 @@ const PaymentMethodsPage = loadable(() => import(/* webpackChunkName: "PaymentMe
 const PrivacyPolicyPage = loadable(() => import(/* webpackChunkName: "PrivacyPolicyPage" */ './containers/PrivacyPolicyPage/PrivacyPolicyPage'));
 const ProfilePage = loadable(() => import(/* webpackChunkName: "ProfilePage" */ './containers/ProfilePage/ProfilePage'));
 const ProfileSettingsPage = loadable(() => import(/* webpackChunkName: "ProfileSettingsPage" */ './containers/ProfileSettingsPage/ProfileSettingsPage'));
+const WishlistPage = loadable(() => import(/* webpackChunkName: "WishlistPage" */ './containers/ViewWishlistPage/ViewWishlistPage'));
 const SearchPage = loadable(() => import(/* webpackChunkName: "SearchPage" */ /* webpackPrefetch: true */  './containers/SearchPage/SearchPage'));
 const StripePayoutPage = loadable(() => import(/* webpackChunkName: "StripePayoutPage" */ './containers/StripePayoutPage/StripePayoutPage'));
 const TermsOfServicePage = loadable(() => import(/* webpackChunkName: "TermsOfServicePage" */ './containers/TermsOfServicePage/TermsOfServicePage'));
@@ -161,6 +162,14 @@ const routeConfiguration = () => {
       auth: true,
       authPage: 'LoginPage',
       component: ProfileSettingsPage,
+    },
+    {
+      path: '/wishlist',
+      name: 'WishlistPage',
+      auth: true,
+      authPage: 'LoginPage',
+      component: WishlistPage,
+      loadData: pageDataLoadingAPI.ViewWishlistPage.loadData,
     },
 
     // Note: authenticating with IdP (e.g. Facebook) expects that /login path exists

@@ -35,6 +35,14 @@ const UserNav = props => {
         name: 'ContactDetailsPage',
       },
     },
+    {
+      text: <FormattedMessage id="ManageListingsPage.yourWishlist" />,
+      selected: selectedPageName === 'ViewWishlistPage',
+      disabled: false,
+      linkProps: {
+        name: 'WishlistPage',
+      },
+    },
   ];
 
   return (

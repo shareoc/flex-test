@@ -26,19 +26,19 @@ export const ADD_OWN_ENTITIES = 'app/ManageListingsPage/ADD_OWN_ENTITIES';
 // ================ Reducer ================ //
 
 const initialState = {
-  pagination: null,
-  queryParams: null,
-  queryInProgress: false,
-  queryListingsError: null,
-  currentPageResultIds: [],
-  ownEntities: {},
-  openingListing: null,
+  pagination: null, // is pagination going to be used
+  queryParams: null, // query parameters for api request that fetches listings
+  queryInProgress: false, // byt default query is not in progress
+  queryListingsError: null, // by default no error
+  currentPageResultIds: [], // empty array to initialise array i guess
+  ownEntities: {}, // current users listings?
+  openingListing: null, // not sure about the rest
   openingListingError: null,
   closingListing: null,
   closingListingError: null,
 };
 
-const resultIds = data => data.data.map(l => l.id);
+const resultIds = data => data.data.map(l => l.id); // function that maps id's from listing objects
 
 const merge = (state, sdkResponse) => {
   const apiResponse = sdkResponse.data;
@@ -156,6 +156,7 @@ export const getOwnListingsById = (state, listingIds) => {
     id,
     type: 'ownListing',
   }));
+  console.log(resources);
   const throwIfNotFound = false;
   return denormalisedEntities(ownEntities, resources, throwIfNotFound);
 };

@@ -63,6 +63,8 @@ export class ProfileSettingsPageComponent extends Component {
           ? { ...profile, profileImageId: uploadedImage.imageId }
           : profile;
 
+      console.log(updatedValues);
+
       onUpdateProfile(updatedValues);
     };
 

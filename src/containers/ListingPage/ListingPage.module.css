@@ -24,6 +24,13 @@
 .sectionImages {
 }
 
+.wishlistButton {
+  @apply --marketplaceButtonStylesPrimary;
+
+  /* Clear padding that is set for link elements looking like buttons */
+  padding: 0;
+}
+
 .threeToTwoWrapper {
   /* Layout */
   display: block;

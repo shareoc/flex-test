@@ -10,6 +10,14 @@
   }
 }
 
+.phone {
+  margin-top: 24px;
+
+  @media (--viewportMedium) {
+    margin-top: 32px;
+  }
+}
+
 .name {
   display: flex;
   justify-content: space-between;

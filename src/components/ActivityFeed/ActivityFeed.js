@@ -131,6 +131,8 @@ const resolveTransitionMessage = (
       ) : (
         <FormattedMessage id="ActivityFeed.transitionAccept" values={{ displayName }} />
       );
+    case TRANSITION_DECLINE_BY_OPERATOR:
+      return <FormattedMessage id="ActivityFeed.operatorDecline" />;
     case TRANSITION_DECLINE:
       return isOwnTransition ? (
         <FormattedMessage id="ActivityFeed.ownTransitionDecline" />
