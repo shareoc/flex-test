@@ -61,6 +61,8 @@ import SectionMapMaybe from './SectionMapMaybe';
 import SectionViewMaybe from './SectionViewMaybe';
 import css from './ListingPage.module.css';
 import './test.css';
+import 'react-multi-carousel/lib/styles.css';
+
 
 const MIN_LENGTH_FOR_LONG_WORDS_IN_TITLE = 16;
 
