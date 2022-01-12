@@ -61,12 +61,13 @@ import SectionMapMaybe from './SectionMapMaybe';
 import SectionViewMaybe from './SectionViewMaybe';
 import css from './ListingPage.module.css';
 import './test.css';
-import 'react-multi-carousel/lib/styles.css';
 
 
 const MIN_LENGTH_FOR_LONG_WORDS_IN_TITLE = 16;
 
 const { UUID } = sdkTypes;
+
+console.log("lol")
 
 const priceData = (price, intl) => {
   if (price && price.currency === config.currency) {
