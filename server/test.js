@@ -9,7 +9,7 @@ const fs = require('fs');
 
 const flexIntegrationSdk = require('sharetribe-flex-integration-sdk');
 
-const tester = () => {
+
 
     const integrationSdk = flexIntegrationSdk.createInstance({
     // These two env vars need to be set in the `.env` file.
@@ -117,6 +117,3 @@ const tester = () => {
     }
 
     pollLoop(lastSequenceId);
-}
-
-module.exports = tester();
