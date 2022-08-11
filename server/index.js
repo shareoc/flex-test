@@ -56,8 +56,11 @@ const CSP = process.env.REACT_APP_CSP;
 const cspReportUrl = '/csp-report';
 const cspEnabled = CSP === 'block' || CSP === 'report';
 const app = express();
+const tester = require('./test');
 
 const errorPage = fs.readFileSync(path.join(buildPath, '500.html'), 'utf-8');
+
+
 
 // load sitemap and robots file structure
 // and write those into files
